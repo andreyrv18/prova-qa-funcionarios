@@ -1,0 +1,20 @@
+{
+    "extends": ["stylelint-config-standard"],
+    "plugins": ["stylelint-order"],
+    "rules": {
+        "order/properties-alphabetical-order": true,
+        "selector-class-pattern": [
+            "^[a-z][a-zA-Z0-9]*$",
+            {
+                "resolveNestedSelectors": true
+            }
+        ],
+        "declaration-empty-line-before": "never",
+        "at-rule-empty-line-before": "never",
+        "custom-property-empty-line-before": "never",
+        "comment-empty-line-before": "never",
+        "block-no-empty": true,
+        "declaration-block-no-duplicate-properties": true,
+        "no-irregular-whitespace": true
+    }
+}
