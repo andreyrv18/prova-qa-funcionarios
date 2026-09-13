@@ -1,64 +1,60 @@
 services:
   db:
     image: mysql:8.0
-    container_name: db_gestao_funcionarios
+    container_name: ${DB_DATABASE}
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: gestao_funcionarios
-      MYSQL_USER: app_user
-      MYSQL_PASSWORD: app_password
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "${DB_PORT}:${DB_PORT}"
     volumes:
       - db_data:/var/lib/mysql
     networks:
-      - gestao_net
+      - qa-prova_net
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: backend_gestao_funcionarios
+    container_name: backend_qa_prova
     restart: always
     ports:
-      - "8080:8080"
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
     environment:
       - SPRING_DATASOURCE_URL=${DB_URL}
-      - SPRING_DATASOURCE_USERNAME=${DB_USUARIO}
-      - SPRING_DATASOURCE_PASSWORD=${DB_SENHA}
-      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      # - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
     depends_on:
       db:
         condition: service_healthy
     networks:
-      - gestao_net
-
+      - qa-prova_net
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend_gestao_funcionarios
+    container_name: frontend_qa-prova
     restart: always
     ports:
-      - "3000:80"
+      - "${FRONTEND_PORT}:${FRONTEND_DOCKER_PORT}"
     depends_on:
       - backend
     networks:
-      - gestao_net
-
+      - qa-prova_net
 
 networks:
-  gestao_net:
+  qa-prova_net:
     driver: bridge
-
 
 volumes:
   db_data:
