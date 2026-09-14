@@ -1,0 +1,19 @@
+.dixi-card {
+    background-color: var(--background);
+    border: 1px solid var(--outline);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    width: 100%;
+}
+
+.dixi-card__title {
+    color: var(--azul-base);
+    font-size: 18px;
+    font-weight: var(--sans-bold);
+    margin: 0 0 20px 0;
+}
+
+.dixi-card__content {
+    width: 100%;
+}
