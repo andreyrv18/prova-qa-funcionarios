@@ -1,0 +1,2 @@
+ALTER TABLE cargos
+    ADD COLUMN deleted_at TIMESTAMP NULL;
