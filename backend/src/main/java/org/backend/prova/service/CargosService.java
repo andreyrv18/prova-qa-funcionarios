@@ -81,15 +81,22 @@ public class CargosService {
   }
 
   public CargosModel atualizarCargoPeloCodigo(String codigoDoCargo, CargosDTO cargosDTO) {
-    Optional<CargosModel> cargoExistente = cargosRepository.findByCodigoDoCargo(codigoDoCargo);
-    if (cargoExistente.isEmpty()) {
-      throw new RecursoNaoEncontradoException(
-          "Cargo não encontrado com o código: " + codigoDoCargo);
-    }
-    cargoExistente.get().setCodigoDoCargo(cargosDTO.getCodigoDoCargo());
-    cargoExistente.get().setDescricaoDoCargo(cargosDTO.getDescricaoDoCargo());
+    CargosModel cargoExistente =
+        cargosRepository
+            .findByCodigoDoCargo(codigoDoCargo)
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Cargo não encontrado"));
 
-    return cargosRepository.save(cargoExistente.get());
+    if (!cargoExistente.getCodigoDoCargo().equals(cargosDTO.getCodigoDoCargo())) {
+      if (cargosRepository.existsByCodigoDoCargo(cargosDTO.getCodigoDoCargo())) {
+        throw new RegraDeNegocioException("Já existe um cargo com este código");
+      }
+    }
+    cargoExistente.setCodigoDoCargo(cargosDTO.getCodigoDoCargo());
+    cargoExistente.setDescricaoDoCargo(cargosDTO.getDescricaoDoCargo());
+
+    CargosModel cargoSalvo = cargosRepository.save(cargoExistente);
+
+    return cargosRepository.save(cargoSalvo);
   }
 
   public void deletar(String codigoDoCargo) {
