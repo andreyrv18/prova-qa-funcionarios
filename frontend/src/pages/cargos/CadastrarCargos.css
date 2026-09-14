@@ -1,0 +1,24 @@
+.dixi-form-cadastro {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.dixi-form-cadastro__row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+}
+
+.dixi-form-cadastro__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .dixi-form-cadastro__row {
+        grid-template-columns: 1fr;
+    }
+}
