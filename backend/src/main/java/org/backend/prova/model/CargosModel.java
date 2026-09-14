@@ -2,9 +2,15 @@ package org.backend.prova.model;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "cargos")
+@SQLDelete(sql = "UPDATE cargos SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
 public class CargosModel {
 
   @Id
@@ -16,6 +22,9 @@ public class CargosModel {
 
   @Column(name = "descricao_do_cargo", nullable = false, unique = true)
   private String descricaoDoCargo;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
   public CargosModel() {}
 

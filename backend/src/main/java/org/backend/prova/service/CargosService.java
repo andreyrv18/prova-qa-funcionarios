@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.backend.prova.exception.RecursoNaoEncontradoException;
+import org.backend.prova.exception.RegistroDuplicadoException;
 import org.backend.prova.exception.RegraDeNegocioException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +61,7 @@ public class CargosService {
       log.warn(
           "Usuario tentou cadastrar um cargo com código duplicado {}",
           cargosDTO.getCodigoDoCargo());
-      throw new RegraDeNegocioException("Já existe um cargo com este código");
+      throw new RegistroDuplicadoException("Já existe um cargo com este código");
     }
 
     CargosModel modelParaSalvar = new CargosModel();
@@ -77,5 +78,33 @@ public class CargosService {
   public Page<CargosDTO> listarPaginado(Pageable pageable) {
     Page<CargosModel> pageModel = cargosRepository.findAll(pageable);
     return pageModel.map(CargosDTO::new);
+  }
+
+  public CargosModel atualizarCargoPeloCodigo(String codigoDoCargo, CargosDTO cargosDTO) {
+    Optional<CargosModel> cargoExistente = cargosRepository.findByCodigoDoCargo(codigoDoCargo);
+    if (cargoExistente.isEmpty()) {
+      throw new RecursoNaoEncontradoException(
+          "Cargo não encontrado com o código: " + codigoDoCargo);
+    }
+    cargoExistente.get().setCodigoDoCargo(cargosDTO.getCodigoDoCargo());
+    cargoExistente.get().setDescricaoDoCargo(cargosDTO.getDescricaoDoCargo());
+
+    return cargosRepository.save(cargoExistente.get());
+  }
+
+  public void deletar(String codigoDoCargo) {
+    CargosModel cargosModel =
+        cargosRepository
+            .findByCodigoDoCargo(codigoDoCargo)
+            .orElseThrow(
+                () ->
+                    new RecursoNaoEncontradoException(
+                        "Cargo com codigo "
+                            + codigoDoCargo
+                            + " não encontrado ou já foi excluído."));
+
+    cargosRepository.deleteById(cargosModel.getId());
+
+    log.info("Cargo com ID {} marcado como excluído (Soft Delete).", codigoDoCargo);
   }
 }

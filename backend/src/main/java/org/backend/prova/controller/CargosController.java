@@ -3,6 +3,7 @@ package org.backend.prova.controller;
 import org.backend.prova.dto.CargosDTO;
 import org.backend.prova.exception.RecursoNaoEncontradoException;
 import org.backend.prova.exception.RegraDeNegocioException;
+import org.backend.prova.model.CargosModel;
 import org.backend.prova.service.CargosService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public class CargosController {
     this.cargosService = cargosService;
   }
 
-  @GetMapping("/list")
+  @GetMapping("/listar")
   public ResponseEntity<List<CargosDTO>> getAllCargos() throws RecursoNaoEncontradoException {
     List<CargosDTO> listaTodosCargos = cargosService.listaTodosCargos();
 
@@ -57,5 +58,21 @@ public class CargosController {
 
     List<CargosDTO> resultado = cargosService.pesquisarPorDescricao(descricaoDoCargo);
     return ResponseEntity.ok(resultado);
+  }
+
+  @PutMapping("/{codigoDoCargo}")
+  public ResponseEntity<?> editarCargo(
+      @PathVariable String codigoDoCargo, @RequestBody CargosDTO cargosDTO) {
+    CargosModel editarCargo = cargosService.atualizarCargoPeloCodigo(codigoDoCargo, cargosDTO);
+
+    CargosDTO respostaDTO = new CargosDTO(editarCargo);
+    return ResponseEntity.ok().body(respostaDTO);
+  }
+
+  @DeleteMapping("/{codigoDoCargo}")
+  public ResponseEntity<Void> deletarCargo(@PathVariable String codigoDoCargo) {
+    cargosService.deletar(codigoDoCargo);
+
+    return ResponseEntity.noContent().build();
   }
 }
