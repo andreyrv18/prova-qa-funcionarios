@@ -1,0 +1,58 @@
+.dixi-listagem-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #fcfcfc;
+}
+
+.dixi-listagem-layout__main {
+    margin-left: 100px; /* Deslocamento para a Navbar lateral */
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.dixi-listagem-layout__container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.dixi-listagem-layout__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.dixi-listagem-layout__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dixi-listagem-layout__title {
+    color: var(--azul-base);
+    font-size: var(--titulo-de-pagina);
+    font-weight: var(--sans-bold);
+    margin: 0;
+}
+
+.dixi-listagem-layout__subtitle {
+    color: var(--corpo-de-texto);
+    font-size: var(--subtitulo);
+    font-weight: var(--sans-semibold);
+    margin: 0;
+}
+
+.dixi-listagem-layout__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dixi-listagem-layout__content {
+    width: 100%;
+}

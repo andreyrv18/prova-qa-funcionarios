@@ -1,0 +1,51 @@
+.dixi-cadastro-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #fcfcfc;
+}
+
+.dixi-cadastro-layout__main {
+    margin-left: 100px; /* Offset equivalente à largura da Navbar */
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.dixi-cadastro-layout__container {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Cabeçalho de Página conforme padrão visual */
+.dixi-cadastro-layout__header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dixi-cadastro-layout__title {
+    color: var(--azul-base);
+    font-size: var(--titulo-de-pagina); /* 35px Bold */
+    font-weight: var(--sans-bold);
+    margin: 0;
+}
+
+.dixi-cadastro-layout__subtitle {
+    color: var(--corpo-de-texto);
+    font-size: var(--subtitulo); /* 16px Semibold */
+    font-weight: var(--sans-semibold);
+    margin: 0;
+}
+
+/* Botões centralizados na parte inferior */
+.dixi-cadastro-layout__actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+}
