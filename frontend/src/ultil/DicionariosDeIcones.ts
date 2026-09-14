@@ -1,6 +1,7 @@
 import {
     MdAdd,
     MdBadge,
+    MdCalendarToday,
     MdCheck,
     MdClose,
     MdDownload,
@@ -10,7 +11,7 @@ import {
     MdSave,
 } from "react-icons/md";
 
-import type { IconType } from "react-icons";
+import type {IconType} from "react-icons";
 
 interface DicionarioDeIcones {
     Funcionario: IconType;
@@ -22,6 +23,7 @@ interface DicionarioDeIcones {
     Download: IconType;
     Fechar: IconType;
     Confirmar: IconType;
+    Calendario: IconType;
 }
 
 export const AppIcons: DicionarioDeIcones = {
@@ -34,4 +36,5 @@ export const AppIcons: DicionarioDeIcones = {
     Download: MdDownload,
     Fechar: MdClose,
     Confirmar: MdCheck,
+    Calendario: MdCalendarToday
 };
