@@ -1,0 +1,64 @@
+.dixi-tabela-container {
+    width: 100%;
+    overflow-x: auto;
+    max-height: 520px;
+    overflow-y: auto;
+    border-radius: 4px;
+}
+
+.dixi-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--interior-de-campo-de-texto);
+    background-color: var(--background);
+}
+
+.dixi-tabela thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #e9ecef;
+}
+
+.dixi-tabela th {
+    color: var(--azul-base);
+    font-weight: var(--sans-bold);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--outline);
+    font-size: 13px;
+}
+
+.dixi-tabela td {
+    padding: 12px 16px;
+    color: var(--texto-destaque);
+    font-weight: var(--sans-semibold);
+    border-bottom: 1px solid var(--outline);
+    vertical-align: middle;
+}
+
+.dixi-tabela tbody tr:hover {
+    background-color: var(--background-2);
+}
+
+.dixi-tabela__vazio {
+    text-align: center !important;
+    color: var(--corpo-de-texto);
+    padding: 24px !important;
+}
+
+.dixi-tabela__btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--azul-base);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.dixi-tabela__btn-icon:hover {
+    background-color: var(--azul-leve);
+}
