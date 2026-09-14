@@ -1,7 +1,11 @@
-import "./App.module.css";
+import { Outlet } from "react-router";
 
-function App() {
-    return <>Prova</>;
-}
+export const App = () => {
+    return (
+        <main>
+            <Outlet />
+        </main>
+    );
+};
 
 export default App;
