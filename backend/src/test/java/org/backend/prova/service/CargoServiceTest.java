@@ -1,12 +1,10 @@
-package org.backend.prova.controller;
+package org.backend.prova.service;
 
 import org.backend.prova.dto.CargosDTO;
 import org.backend.prova.exception.RecursoNaoEncontradoException;
 import org.backend.prova.exception.RegistroDuplicadoException;
-import org.backend.prova.exception.RegraDeNegocioException;
 import org.backend.prova.model.CargosModel;
 import org.backend.prova.repository.CargosRepository;
-import org.backend.prova.service.CargosService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
