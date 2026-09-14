@@ -17,46 +17,47 @@ import java.time.Instant;
 public class GlobalExceptionHandler {
   private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    // id que não existe no banco
-    @ExceptionHandler(RecursoNaoEncontradoException.class)
-    public ResponseEntity<ErroPadraoDTO> lidarComRecursoNaoEncontrado(
-        RecursoNaoEncontradoException e, HttpServletRequest request) {
+  // id que não existe no banco
+  @ExceptionHandler(RecursoNaoEncontradoException.class)
+  public ResponseEntity<ErroPadraoDTO> lidarComRecursoNaoEncontrado(
+      RecursoNaoEncontradoException e, HttpServletRequest request) {
 
-      HttpStatus codigoStatus = HttpStatus.NOT_FOUND;
+    HttpStatus codigoStatus = HttpStatus.NOT_FOUND;
 
-      ErroPadraoDTO erro =
-          new ErroPadraoDTO(
-              Instant.now(),
-              codigoStatus.value(),
-              "Recurso não encontrado",
-              e.getMessage(),
-              request.getRequestURI());
+    ErroPadraoDTO erro =
+        new ErroPadraoDTO(
+            Instant.now(),
+            codigoStatus.value(),
+            "Recurso não encontrado",
+            e.getMessage(),
+            request.getRequestURI());
 
-      return ResponseEntity.status(codigoStatus).body(erro);
-    }
+    return ResponseEntity.status(codigoStatus).body(erro);
+  }
 
-    // Regra de negógio Violada
-    @ExceptionHandler(RegraDeNegocioException.class)
-    public ResponseEntity<ErroPadraoDTO> lidarComRegraDeNegocio(
-        RegraDeNegocioException e, HttpServletRequest request) {
+  // Regra de negógio Violada
+  @ExceptionHandler(RegraDeNegocioException.class)
+  public ResponseEntity<ErroPadraoDTO> lidarComRegraDeNegocio(
+      RegraDeNegocioException e, HttpServletRequest request) {
 
-      HttpStatus codigoStatus = HttpStatus.UNPROCESSABLE_CONTENT;
+    HttpStatus codigoStatus = HttpStatus.UNPROCESSABLE_CONTENT;
 
-      ErroPadraoDTO erro =
-          new ErroPadraoDTO(
-              Instant.now(),
-              codigoStatus.value(),
-              "Erro de regra de negócio",
-              e.getMessage(),
-              request.getRequestURI());
+    ErroPadraoDTO erro =
+        new ErroPadraoDTO(
+            Instant.now(),
+            codigoStatus.value(),
+            "Erro de regra de negócio",
+            e.getMessage(),
+            request.getRequestURI());
 
-      return ResponseEntity.status(codigoStatus).body(erro);
-    }
+    return ResponseEntity.status(codigoStatus).body(erro);
+  }
 
   // Rotas Digitadas errado
   @ExceptionHandler(NoResourceFoundException.class)
   public ResponseEntity<ErroPadraoDTO> handleException(
-      NoResourceFoundException exception, HttpServletRequest request) throws RecursoNaoEncontradoException {
+      NoResourceFoundException exception, HttpServletRequest request)
+      throws RecursoNaoEncontradoException {
     HttpStatus status = HttpStatus.NOT_FOUND;
     String rota = request.getRequestURI();
 
@@ -93,5 +94,19 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(codigoStatus).body(error);
   }
 
+  @ExceptionHandler(RegistroDuplicadoException.class)
+  public ResponseEntity<ErroPadraoDTO> lidaComRegistroDuplicado(
+      RegistroDuplicadoException e, HttpServletRequest request) {
 
+    HttpStatus codigoStatus = HttpStatus.CONFLICT;
+    ErroPadraoDTO erro =
+        new ErroPadraoDTO(
+            Instant.now(),
+            codigoStatus.value(),
+            "Erro de duplicidade",
+            e.getMessage(),
+            request.getRequestURI());
+
+    return ResponseEntity.status(codigoStatus).body(erro);
+  }
 }
