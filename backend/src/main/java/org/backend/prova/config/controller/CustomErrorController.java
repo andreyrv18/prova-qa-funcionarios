@@ -44,7 +44,7 @@ public class CustomErrorController implements ErrorController {
           case NOT_FOUND -> "Rota não encontrada";
           case METHOD_NOT_ALLOWED -> "Método HTTP não permitido";
           case BAD_REQUEST -> "Requisição inválida";
-          case UNPROCESSABLE_ENTITY -> "Erro de regra de negócio";
+          case UNPROCESSABLE_CONTENT -> "Erro de regra de negócio";
           default -> "Erro interno do servidor";
         };
 

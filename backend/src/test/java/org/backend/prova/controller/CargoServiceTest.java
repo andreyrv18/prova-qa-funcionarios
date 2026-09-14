@@ -111,7 +111,7 @@ class CargoServiceTest {
 
     assertNotNull(resultado);
     assertEquals(1, resultado.getTotalElements());
-    assertEquals("DEV", resultado.getContent().get(0).getCodigoDoCargo());
+    assertEquals("DEV", resultado.getContent().getFirst().getCodigoDoCargo());
 
     verify(cargoRepository).findAll(pageable);
   }
@@ -132,7 +132,7 @@ class CargoServiceTest {
 
     assertNotNull(resultado);
     assertEquals(1, resultado.size());
-    assertEquals("DEV", resultado.get(0).getCodigoDoCargo());
+    assertEquals("DEV", resultado.getFirst().getCodigoDoCargo());
 
     verify(cargoRepository).findByDescricaoDoCargoContainingIgnoreCase("env");
   }

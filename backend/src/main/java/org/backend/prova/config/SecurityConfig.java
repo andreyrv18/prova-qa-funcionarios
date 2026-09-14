@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -14,10 +15,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // 1. Desabilita CSRF
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
 
                 // 2. Desabilita CORS do Security temporariamente (o do WebMvc já cuida disso)
-                .cors(cors -> cors.disable())
+                .cors(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
                         // 3. LIBERA ABSOLUTAMENTE TUDO. Sem exceção.

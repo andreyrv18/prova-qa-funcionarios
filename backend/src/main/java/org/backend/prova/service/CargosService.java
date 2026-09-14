@@ -27,9 +27,7 @@ public class CargosService {
   public List<CargosDTO> listaTodosCargos() throws RecursoNaoEncontradoException {
     List<CargosModel> listaTodosCargos = cargosRepository.findAll();
 
-    List<CargosDTO> listaDto = listaTodosCargos.stream().map(CargosDTO::new).toList();
-
-    return listaDto;
+    return listaTodosCargos.stream().map(CargosDTO::new).toList();
   }
 
   public CargosDTO buscarCargoPorCodigo(String codigoCargo) throws RecursoNaoEncontradoException {
