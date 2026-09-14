@@ -1,0 +1,81 @@
+.dixi-navbar {
+    width: 100px;
+    min-width: 100px;
+    height: 100vh;
+    background-color: var(--azul-base);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.dixi-navbar__logo {
+    padding: 24px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.dixi-navbar__menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.dixi-navbar__item {
+    background: transparent;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    padding: 16px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+}
+
+.dixi-navbar__item:hover {
+    background-color: var(--azul-hover);
+}
+
+.dixi-navbar__item--active {
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: inset 4px 0 0 #ffffff;
+}
+
+.dixi-navbar__icon {
+    font-size: 24px;
+    display: flex;
+}
+
+.dixi-navbar__label {
+    font-size: 11px;
+    font-weight: var(--sans-semibold);
+    color: #ffffff;
+    text-align: center;
+}
+.dixi-navbar__item {
+    background: transparent;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    padding: 16px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    text-decoration: none; /* Adicionado para suportar a tag <a> do NavLink */
+    box-sizing: border-box;
+}
