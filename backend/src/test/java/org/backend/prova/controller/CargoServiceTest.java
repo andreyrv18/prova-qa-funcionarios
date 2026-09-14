@@ -2,6 +2,7 @@ package org.backend.prova.controller;
 
 import org.backend.prova.dto.CargosDTO;
 import org.backend.prova.exception.RecursoNaoEncontradoException;
+import org.backend.prova.exception.RegistroDuplicadoException;
 import org.backend.prova.exception.RegraDeNegocioException;
 import org.backend.prova.model.CargosModel;
 import org.backend.prova.repository.CargosRepository;
@@ -39,8 +40,8 @@ class CargoServiceTest {
     CargosDTO dto = new CargosDTO(modelExistente);
     when(cargoRepository.existsByCodigoDoCargo("DEV")).thenReturn(true);
 
-    RegraDeNegocioException exception =
-        assertThrows(RegraDeNegocioException.class, () -> cargoService.salvar(dto));
+      RegistroDuplicadoException exception =
+        assertThrows(RegistroDuplicadoException.class, () -> cargoService.salvar(dto));
 
     assertEquals("Já existe um cargo com este código", exception.getMessage());
 
