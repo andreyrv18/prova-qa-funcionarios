@@ -1,4 +1,4 @@
-package org.backend.prova.config; // GARANTA que este é o pacote correto
+package org.backend.prova; // GARANTA que este é o pacote correto
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
