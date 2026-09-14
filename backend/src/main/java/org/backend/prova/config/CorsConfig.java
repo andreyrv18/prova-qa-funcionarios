@@ -1,4 +1,4 @@
-package org.backend.prova;
+package org.backend.prova.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
