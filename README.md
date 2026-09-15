@@ -5,7 +5,7 @@
 Primeiro clone o projeto usando o comando
 
 ```bash
-  git@github.com:andreyrv18/prova-qa-funcionarios.git
+ git clone git@github.com:andreyrv18/prova-qa-funcionarios.git
 ```
 
 Após clonar o repositório acesse o diretório:
