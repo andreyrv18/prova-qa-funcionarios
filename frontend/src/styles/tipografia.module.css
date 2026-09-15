@@ -1,3 +1,4 @@
+/* stylelint-disable selector-class-pattern */
 .tituloPagina {
     color: var(--texto-destaque);
     font-size: var(--titulo-de-pagina);
