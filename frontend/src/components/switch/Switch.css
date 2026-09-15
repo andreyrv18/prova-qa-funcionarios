@@ -52,20 +52,18 @@
     background-color: var(--azul-base);
     border-color: var(--azul-base);
 
-.switch--checked .switch__thumb {
-    background-color: var(--background);
-    transform: translateX(20px);
-}
-/* Hover Desmarcado */
-.switch:hover:not(.switch--disabled) .switch__track {
-    background-color: var(--azul-leve);
-}
-/* Marcado (Checked) */
-/* Hover Marcado */
-.switch--checked:hover:not(.switch--disabled) .switch__track {
-    background-color: var(--azul-hover);
-    border-color: var(--azul-hover);
-}
-
-
+    .switch--checked .switch__thumb {
+        background-color: var(--background);
+        transform: translateX(20px);
+    }
+    /* Hover Desmarcado */
+    .switch:hover:not(.switch--disabled) .switch__track {
+        background-color: var(--azul-leve);
+    }
+    /* Marcado (Checked) */
+    /* Hover Marcado */
+    .switch--checked:hover:not(.switch--disabled) .switch__track {
+        background-color: var(--azul-hover);
+        border-color: var(--azul-hover);
+    }
 }

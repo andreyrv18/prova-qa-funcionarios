@@ -1,5 +1,5 @@
-
 /* stylelint-disable selector-class-pattern */
+/* stylelint-disable no-descending-specificity */
 .dixi-combo {
     display: flex;
     flex-direction: column;
@@ -158,13 +158,13 @@
 }
 /* Hover */
 .dixi-combo:not(.dixi-combo--disabled, .dixi-combo--error),
-    .dixi-combo__container:hover {
+.dixi-combo__container:hover {
     border-color: var(--azul-base);
 }
 
 .dixi-combo:not(.dixi-combo--disabled, .dixi-combo--error),
-    .dixi-combo__container:hover,
-    .dixi-combo__label {
+.dixi-combo__container:hover,
+.dixi-combo__label {
     color: var(--azul-base);
 }
 /* Quando aberto, a linha da borda inferior continua arredondada mas o menu desce */
