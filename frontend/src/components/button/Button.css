@@ -9,19 +9,16 @@
     justify-content: center;
     transition: all 0.2s ease;
 }
-
 /* Tamanho Pequeno (Arredondado / Pílula) */
 .btn--small {
     border-radius: 20px;
     padding: 6px 16px;
 }
-
 /* Tamanho Médio (Estilo mais quadrado com leve arredondamento) */
 .btn--medium {
     border-radius: 6px;
     padding: 10px 24px;
 }
-
 /* Botão Contornado */
 .btn--outline {
     background: var(--background);
@@ -36,7 +33,6 @@
     background: var(--azul-base);
     color: var(--background);
 }
-
 /* Botão Cheio */
 .btn--filled {
     background: var(--azul-base);
@@ -52,7 +48,6 @@
     background: var(--azul-base);
     border-color: var(--azul-base);
 }
-
 /* Estado Desabilitado */
 .btn--disabled {
     cursor: not-allowed;
