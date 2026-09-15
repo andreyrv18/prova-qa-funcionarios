@@ -16,10 +16,11 @@
     position: relative;
     transition: all 0.2s ease;
 }
-
 /* Label sobrepondo a borda */
 .dixi-input__label {
-    background: var(--background); /* Esconde a linha da borda que passa por trás */
+    background: var(
+        --background
+    ); /* Esconde a linha da borda que passa por trás */
     color: var(--titulo-de-campo);
     font-size: var(--titulo-de-campo-de-texto);
     font-weight: var(--sans-semibold);
@@ -29,16 +30,6 @@
     top: -7px;
     transition: color 0.2s ease;
     z-index: 1;
-}
-
-/* Hover e Foco (Azul) */
-.dixi-input:not(.dixi-input--disabled):not(.dixi-input--error) .dixi-input__container:hover,
-.dixi-input:not(.dixi-input--disabled):not(.dixi-input--error) .dixi-input__container:focus-within {
-    border-color: var(--azul-base);
-}
-.dixi-input:not(.dixi-input--disabled):not(.dixi-input--error) .dixi-input__container:hover .dixi-input__label,
-.dixi-input:not(.dixi-input--disabled):not(.dixi-input--error) .dixi-input__container:focus-within .dixi-input__label {
-    color: var(--azul-base);
 }
 
 .dixi-input__field {
@@ -62,34 +53,52 @@
     font-size: 20px;
     margin-left: 8px;
 }
-
 /* Estado de Erro */
 .dixi-input--error .dixi-input__container {
-    border-color: #E53E3E;
+    border-color: #e53e3e;
 }
+
 .dixi-input--error .dixi-input__label,
 .dixi-input--error .dixi-input__icon {
-    color: #E53E3E;
+    color: #e53e3e;
 }
+
 .dixi-input__error-msg {
-    color: #E53E3E;
+    color: #e53e3e;
     font-size: 12px;
     font-weight: var(--sans-semibold);
     padding-left: 4px;
 }
-
 /* Estado Desabilitado */
 .dixi-input--disabled .dixi-input__container,
 .dixi-input--disabled .dixi-input__label {
     background: var(--background-2);
 }
+
 .dixi-input--disabled .dixi-input__container {
     border-color: var(--trancado-ou-explicativo);
     cursor: not-allowed;
 }
+
 .dixi-input--disabled .dixi-input__field,
 .dixi-input--disabled .dixi-input__icon,
 .dixi-input--disabled .dixi-input__label {
     color: var(--trancado-ou-explicativo);
     cursor: not-allowed;
+}
+/* Hover e Foco (Azul) */
+.dixi-input:not(.dixi-input--disabled, .dixi-input--error)
+    .dixi-input__container:hover,
+.dixi-input:not(.dixi-input--disabled, .dixi-input--error)
+    .dixi-input__container:focus-within {
+    border-color: var(--azul-base);
+}
+
+.dixi-input:not(.dixi-input--disabled, .dixi-input--error)
+    .dixi-input__container:hover
+    .dixi-input__label,
+.dixi-input:not(.dixi-input--disabled, .dixi-input--error)
+    .dixi-input__container:focus-within
+    .dixi-input__label {
+    color: var(--azul-base);
 }

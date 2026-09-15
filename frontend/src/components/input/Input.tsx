@@ -2,13 +2,13 @@ import "./Input.css";
 import type { InputProps } from "./Input.types";
 
 const Input = ({
-                   label,
-                   error,
-                   icon,
-                   disabled,
-                   className = "",
-                   ...rest
-               }: InputProps) => {
+    label,
+    error,
+    icon,
+    disabled,
+    className = "",
+    ...rest
+}: InputProps) => {
     const wrapperClasses = [
         "dixi-input",
         error && "dixi-input--error",
