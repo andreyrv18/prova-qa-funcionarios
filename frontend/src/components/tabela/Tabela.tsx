@@ -1,75 +1,51 @@
-import React from "react";
 import "./Tabela.css";
+import type { TabelaProps } from "./Tabela.types.ts";
 
-export interface ColunaTabela<T> {
-    key: string;
-    titulo: string;
-    width?: string;
-    align?: "left" | "center" | "right";
-    render?: (item: T) => React.ReactNode;
-}
-
-export interface TabelaProps<T> {
-    colunas: ColunaTabela<T>[];
-    dados: T[];
-    keyExtractor: (item: T, index: number) => string | number;
-    mensagemVazia?: string;
-}
-export const Tabela = <T,>({
-                               colunas,
-                               dados,
-                               keyExtractor,
-                               mensagemVazia = "Nenhum registro encontrado.",
-                           }: TabelaProps<T>) => {
+export function Tabela<T>({
+    colunas,
+    dados,
+    keyExtractor,
+    onRowClick,
+}: TabelaProps<T>) {
     return (
-        <div className="dixi-tabela-container">
-            <table className="dixi-tabela">
-                <thead>
+        <table className="dixi-tabela">
+            <thead>
                 <tr>
-                    {colunas.map((coluna) => (
+                    {colunas.map(col => (
                         <th
-                            key={coluna.key}
+                            key={col.key}
                             style={{
-                                width: coluna.width,
-                                textAlign: coluna.align || "left",
+                                width: col.width,
+                                textAlign: col.align || "left",
                             }}
                         >
-                            {coluna.titulo}
+                            {col.titulo}
                         </th>
                     ))}
                 </tr>
-                </thead>
-                <tbody>
-                {dados.length > 0 ? (
-                    dados.map((item, index) => {
-                        // Garante que a chave nunca seja undefined ou null
-                        const chave = keyExtractor(item, index) ?? index;
-                        return (
-                            <tr key={chave}>
-                                {colunas.map((coluna) => (
-                                    <td
-                                        key={coluna.key}
-                                        style={{ textAlign: coluna.align || "left" }}
-                                    >
-                                        {coluna.render
-                                            ? coluna.render(item)
-                                            : (item as Record<string, any>)[coluna.key]}
-                                    </td>
-                                ))}
-                            </tr>
-                        );
-                    })
-                ) : (
-                    <tr>
-                        <td colSpan={colunas.length} className="dixi-tabela__vazio">
-                            {mensagemVazia}
-                        </td>
+            </thead>
+            <tbody>
+                {dados.map((item, index) => (
+                    <tr
+                        key={keyExtractor(item, index)}
+                        onClick={() => onRowClick && onRowClick(item)}
+                        style={{ cursor: onRowClick ? "pointer" : "default" }}
+                    >
+                        {colunas.map(col => (
+                            <td
+                                key={col.key}
+                                style={{ textAlign: col.align || "left" }}
+                            >
+                                {col.render
+                                    ? col.render(item, index)
+                                    : (item as any)[col.key]}
+                            </td>
+                        ))}
                     </tr>
-                )}
-                </tbody>
-            </table>
-        </div>
+                ))}
+            </tbody>
+        </table>
     );
-};
+}
 
 export default Tabela;

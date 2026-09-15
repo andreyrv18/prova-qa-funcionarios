@@ -1,38 +1,37 @@
 .dixi-tabela-container {
-    width: 100%;
-    overflow-x: auto;
-    max-height: 520px;
-    overflow-y: auto;
     border-radius: 4px;
+    max-height: 520px;
+    overflow: auto;
+    width: 100%;
 }
 
 .dixi-tabela {
-    width: 100%;
+    background-color: var(--background);
     border-collapse: collapse;
     font-size: var(--interior-de-campo-de-texto);
-    background-color: var(--background);
+    width: 100%;
 }
 
 .dixi-tabela thead {
+    background-color: #e9ecef;
     position: sticky;
     top: 0;
     z-index: 2;
-    background-color: #e9ecef;
 }
 
 .dixi-tabela th {
+    border-bottom: 1px solid var(--outline);
     color: var(--azul-base);
+    font-size: 13px;
     font-weight: var(--sans-bold);
     padding: 12px 16px;
-    border-bottom: 1px solid var(--outline);
-    font-size: 13px;
 }
 
 .dixi-tabela td {
-    padding: 12px 16px;
+    border-bottom: 1px solid var(--outline);
     color: var(--texto-destaque);
     font-weight: var(--sans-semibold);
-    border-bottom: 1px solid var(--outline);
+    padding: 12px 16px;
     vertical-align: middle;
 }
 
@@ -41,21 +40,21 @@
 }
 
 .dixi-tabela__vazio {
-    text-align: center !important;
     color: var(--corpo-de-texto);
     padding: 24px !important;
+    text-align: center !important;
 }
 
 .dixi-tabela__btn-icon {
+    align-items: center;
     background: transparent;
     border: none;
+    border-radius: 4px;
     color: var(--azul-base);
     cursor: pointer;
     display: inline-flex;
-    align-items: center;
     justify-content: center;
     padding: 4px;
-    border-radius: 4px;
     transition: background-color 0.2s;
 }
 
