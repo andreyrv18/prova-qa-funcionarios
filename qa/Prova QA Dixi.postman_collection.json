@@ -1,0 +1,2105 @@
+{
+  "info": {
+    "_postman_id": "274309d5-160f-4b6e-8ee5-9da3ba768cd1",
+    "name": "Prova QA Dixi",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45626850"
+  },
+  "item": [
+    {
+      "name": "Cargos",
+      "item": [
+        {
+          "name": "0. Rota Inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar se o erro indica Rota não encontrada\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('error');\r",
+                  "    pm.expect(jsonData.error).to.include(\"Rota não encontrada\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"rota_inexistente\", \"/api/cargos/admin/1\");\r",
+                  "\r",
+                  "pm.test(\"Validar se mensagem de erro indica (No endpoint GET)\", function () {\r",
+                  "    const rota_inexistente = pm.collectionVariables.get(\"rota_inexistente\");\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(`No endpoint GET ${rota_inexistente}`);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/cargos/admin/1",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "admin",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1. Criar Cargo",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"O código de status é 201. Criado.\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do JSON retornado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('codigoDoCargo');\r",
+                  "    pm.expect(jsonData).to.have.property('descricaoDoCargo');\r",
+                  "\r",
+                  "    pm.expect(jsonData.codigoDoCargo).to.be.a('string');\r",
+                  "    pm.expect(jsonData.descricaoDoCargo).to.be.a('string');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se os dados retornados batem com o que foi enviado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "    pm.expect(jsonData.codigoDoCargo).to.eql(requestBody.codigoDoCargo);\r",
+                  "    pm.expect(jsonData.descricaoDoCargo).to.eql(requestBody.descricaoDoCargo);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Salva codigo do Cargo para proximos Testes\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.environment.set(\"codigoDoCargo\", jsonData.codigoDoCargo);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"codigoDoCargo\": \"R7\",\r\n  \"descricaoDoCargo\": \"R7 da programação\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/cargos/criar",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "criar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Criar Cargo - Duplicado (Negativo)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "\r",
+                  "pm.test(\"Validar status code de erro de negócio 422 ou 409 para duplicidade\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([422, 409]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar mensagem de erro se acusa duplicidade\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(\"Já existe um cargo com este código\");\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do erro\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('timestamp');\r",
+                  "    pm.expect(jsonData).to.have.property('status');\r",
+                  "    pm.expect(jsonData).to.have.property('error');\r",
+                  "    pm.expect(jsonData).to.have.property('path');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"codigoDoCargo\": \"R7\",\r\n  \"descricaoDoCargo\": \"R7 da programação\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/cargos/criar",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "criar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Buscar por Código",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do JSON\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('codigoDoCargo');\r",
+                  "    pm.expect(jsonData).to.have.property('descricaoDoCargo');\r",
+                  "});\r",
+                  "\r",
+                  "// Validar se o ID retornado é o mesmo que foi buscado\r",
+                  "pm.test(\"Response ID matches requested ID\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const requestedId = pm.environment.get(\"codigoDoCargo\");\r",
+                  "    pm.expect(jsonData.codigoDoCargo).to.equal(requestedId);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/cargos/{{codigoDoCargo}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "{{codigoDoCargo}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Buscar por Código - Inexistente (Negativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 404 Not Found\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar mensagem de erro indica Recurso não encontrado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(\"Não existe um cargo com este código\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do erro\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('timestamp');\r",
+                  "    pm.expect(jsonData).to.have.property('status');\r",
+                  "    pm.expect(jsonData.status).to.eql(404);\r",
+                  "    pm.expect(jsonData).to.have.property('error');\r",
+                  "    pm.expect(jsonData).to.have.property('path');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/cargos/SS999",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "SS999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Editar Cargo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do JSON\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('codigoDoCargo');\r",
+                  "    pm.expect(jsonData).to.have.property('descricaoDoCargo');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se os dados foram atualizados\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "    pm.expect(jsonData.descricaoDoCargo).to.eql(requestBody.descricaoDoCargo);\r",
+                  "    pm.expect(jsonData.codigoDoCargo).to.eql(requestBody.codigoDoCargo);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"codigoDoCargo\": \"R9\",\r\n  \"descricaoDoCargo\": \"Fenomeno\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/cargos/{{codigoDoCargo}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "{{codigoDoCargo}}"
+              ]
+            },
+            "description": "Você vai poder editar com o **código do cargo**, uma vez que ele é unico no banco de dados assim evitando a necessidade de usar ids"
+          },
+          "response": []
+        },
+        {
+          "name": "6. Editar Cargo - Inexistente (Negativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 404 Not Found\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "// \r",
+                  "pm.test(\"Validar mensagem de erro indica Recurso não encontrado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(\"não encontrado\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"codigoDoCargo\": \"QA\",\r\n  \"descricaoDoCargo\": \"Analistas de Qualidade\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/cargos/{{codigoDoCargo}}777",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "{{codigoDoCargo}}777"
+              ]
+            },
+            "description": "Você vai poder editar com o **código do cargo**, uma vez que ele é unico no banco de dados assim evitando a necessidade de usar ids"
+          },
+          "response": []
+        },
+        {
+          "name": "7. Listar Paginado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura de paginação\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('content');\r",
+                  "    pm.expect(jsonData).to.have.property('pageable');\r",
+                  "    pm.expect(jsonData).to.have.property('totalElements');\r",
+                  "    pm.expect(jsonData).to.have.property('totalPages');\r",
+                  "    pm.expect(jsonData).to.have.property('number');\r",
+                  "    pm.expect(jsonData).to.have.property('size');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se content é um array\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.content).to.be.an('array');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se cada item tem a estrutura correta\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    if (jsonData.content.length > 0) {\r",
+                  "        const firstItem = jsonData.content[0];\r",
+                  "        pm.expect(firstItem).to.have.property('codigoDoCargo');\r",
+                  "        pm.expect(firstItem).to.have.property('descricaoDoCargo');\r",
+                  "    }\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se a paginação está correta\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.number).to.eql(0);\r",
+                  "    pm.expect(jsonData.size).to.eql(10);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/cargos/paginado?page=0&size=10",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "paginado"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7.1 Listar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Codigo de status é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"A resposta é um array\", function () {\r",
+                  "    const dados = pm.response.json();\r",
+                  "    pm.expect(dados).to.be.an(\"array\");\r",
+                  "    pm.expect(dados.length).to.be.greaterThan(0);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Cada posição precisa seguir o contrato corretamente (codigoDoCargo, descricaoDoCargo)\",function(){\r",
+                  "    const dados = pm.response.json();\r",
+                  "    const primeiroItem = dados[0];\r",
+                  "\r",
+                  "    pm.expect(primeiroItem).to.have.property(\"codigoDoCargo\");\r",
+                  "    pm.expect(primeiroItem).to.have.property(\"descricaoDoCargo\");\r",
+                  "\r",
+                  "    pm.expect(primeiroItem.codigoDoCargo).to.be.a(\"string\");\r",
+                  "    pm.expect(primeiroItem.descricaoDoCargo).to.be.a(\"string\"); \r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/cargos/listar",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "listar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8. Pesquisar com Filtro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se retornou um array\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.be.an('array');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Pesquisa filtrada retorna os resultados\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const searchTerm = \"Fe\";\r",
+                  "\r",
+                  "    jsonData.forEach(item => {\r",
+                  "        pm.expect(item).to.have.property('descricaoDoCargo');\r",
+                  "        const descricao = item.descricaoDoCargo.toLowerCase();\r",
+                  "        pm.expect(descricao).to.include(searchTerm.toLowerCase());\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Cada um dos Itens tem a estrutura correta\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    if (jsonData.length > 0) {\r",
+                  "\r",
+                  "        jsonData.forEach(item => {\r",
+                  "            pm.expect(item).to.have.property('codigoDoCargo');\r",
+                  "            pm.expect(item).to.have.property('descricaoDoCargo');\r",
+                  "            console.log(item)\r",
+                  "        });\r",
+                  "    }\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/cargos/pesquisar?descricaoDoCargo=Fe",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "pesquisar"
+              ],
+              "query": [
+                {
+                  "key": "descricaoDoCargo",
+                  "value": "Fe"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "9. Pesquisar - Sem Resultado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "// \r",
+                  "pm.test(\"Validar se retornou array vazio\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.be.an('array');\r",
+                  "    pm.expect(jsonData.length).to.eql(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/cargos/pesquisar?descricaoDoCargo=IREP3671",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "pesquisar"
+              ],
+              "query": [
+                {
+                  "key": "descricaoDoCargo",
+                  "value": "IREP3671"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10. Deletar Cargo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 204 sem conteudo)\", function () {\r",
+                  "    pm.expect(pm.response.code).to.equals(204);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Se retornar corpo, validar que está vazio ou com mensagem de sucesso\", function () {\r",
+                  "    const responseText = pm.response.text();\r",
+                  "    if (responseText && responseText.trim() !== \"\") {\r",
+                  "        const jsonData = pm.response.json();\r",
+                  "        pm.expect(jsonData).to.have.property('message');\r",
+                  "        pm.expect(jsonData.message).to.include(\"excluído\");\r",
+                  "    }\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/cargos/{{codigoDoCargo}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "{{codigoDoCargo}}"
+              ]
+            },
+            "description": "Você vai poder Deletar com o **código do cargo**, ele não vai deletar fisicamente, vai realizar um soft delete onde ele cria um time stamp na coluna deleted_at"
+          },
+          "response": []
+        },
+        {
+          "name": "11. Deletar Cargo - Codigo Inexistente (Negativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 404 Not Found\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se mensagem de erro indica Recurso não encontrado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(\"não encontrado\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/cargos/{{codigoDoCargo}}9999999",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "cargos",
+                "{{codigoDoCargo}}9999999"
+              ]
+            },
+            "description": "Você vai poder Deletar com o **código do cargo**, ele não vai deletar fisicamente, vai realizar um soft delete onde ele cria um time stamp na coluna deleted_at"
+          },
+          "response": []
+        }
+      ],
+      "description": "Coleção Postman com testes"
+    },
+    {
+      "name": "Departamentos",
+      "item": [
+        {
+          "name": "0. Rota Inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar se o erro indica Rota não encontrada\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('error');\r",
+                  "    pm.expect(jsonData.error).to.include(\"Rota não encontrada\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"rota_inexistente\", \"/api/departamento/admin/1\");\r",
+                  "\r",
+                  "pm.test(\"Validar se mensagem de erro indica (No endpoint GET)\", function () {\r",
+                  "    const rota_inexistente = pm.collectionVariables.get(\"rota_inexistente\");\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(`No endpoint GET ${rota_inexistente}`);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/departamento/admin/1",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamento",
+                "admin",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1. Criar Departamento",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"O código de status é 201. Criado.\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do JSON retornado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('codigoDoDepartamento');\r",
+                  "    pm.expect(jsonData).to.have.property('descricaoDoDepartamento');\r",
+                  "\r",
+                  "    pm.expect(jsonData.codigoDoDepartamento).to.be.a('string');\r",
+                  "    pm.expect(jsonData.codigoDoDepartamento).to.be.a('string');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se os dados retornados batem com o que foi enviado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "    pm.expect(jsonData.codigoDoDepartamentos).to.eql(requestBody.codigoDoDepartamentos);\r",
+                  "    pm.expect(jsonData.descricaoDoDepartamentos).to.eql(requestBody.descricaoDoDepartamentos);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Salva codigo do Departamentos para proximos Testes\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.environment.set(\"codigoDoDepartamentos\", jsonData.codigoDoDepartamento);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"codigoDoDepartamento\": \"Financeiro\",\r\n  \"descricaoDoDepartamento\": \"Pagamentos ordenados\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/departamentos/criar",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "criar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Criar Departamento- Duplicado (Negativo)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "\r",
+                  "pm.test(\"Validar status code de erro de negócio 422 ou 409 para duplicidade\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([422, 409]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar mensagem de erro se acusa duplicidade\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(\"Já existe um Departamento com este código\");\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do erro\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('timestamp');\r",
+                  "    pm.expect(jsonData).to.have.property('status');\r",
+                  "    pm.expect(jsonData).to.have.property('error');\r",
+                  "    pm.expect(jsonData).to.have.property('path');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"codigoDoDepartamento\": \"Financeiro\",\r\n  \"descricaoDoDepartamento\": \"Pagamentos ordenados\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/departamentos/criar",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "criar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Buscar por Código",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do JSON\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('codigoDoDepartamento');\r",
+                  "    pm.expect(jsonData).to.have.property('descricaoDoDepartamento');\r",
+                  "});\r",
+                  "\r",
+                  "// Validar se o ID retornado é o mesmo que foi buscado\r",
+                  "pm.test(\"Response ID matches requested ID\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const requestedId = pm.environment.get(\"codigoDoDepartamentos\");\r",
+                  "    pm.expect(jsonData.codigoDoDepartamento).to.equal(requestedId);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/departamentos/{{codigoDoDepartamentos}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "{{codigoDoDepartamentos}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Buscar por Código - Inexistente (Negativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 404 Not Found\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Validar mensagem de erro indica recurso não encontrado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(\"Não existe um Departamento com este código\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do erro\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('timestamp');\r",
+                  "    pm.expect(jsonData).to.have.property('status');\r",
+                  "    pm.expect(jsonData.status).to.eql(404);\r",
+                  "    pm.expect(jsonData).to.have.property('error');\r",
+                  "    pm.expect(jsonData).to.have.property('path');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/departamentos/SS999",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "SS999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Editar Departamento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do JSON\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('codigoDoDepartamento');\r",
+                  "    pm.expect(jsonData).to.have.property('descricaoDoDepartamento');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se os dados foram atualizados\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "    pm.expect(jsonData.descricaoDoDepartamento).to.eql(requestBody.descricaoDoDepartamento);\r",
+                  "    pm.expect(jsonData.codigoDoDepartamento).to.eql(requestBody.codigoDoDepartamento);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"codigoDoDepartamento\": \"R7\",\r\n  \"descricaoDoDepartamento\": \"Analistass de Qualidade\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/departamentos/{{codigoDoDepartamentos}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "{{codigoDoDepartamentos}}"
+              ]
+            },
+            "description": "Você vai poder editar com o **código do cargo**, uma vez que ele é unico no banco de dados assim evitando a necessidade de usar ids"
+          },
+          "response": []
+        },
+        {
+          "name": "6. Editar Departamento- Inexistente (Negativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 404 Not Found\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "// \r",
+                  "pm.test(\"Validar mensagem de erro indica Recurso não encontrado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(\"não encontrado\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"codigoDoDepartamento\": \"QA\",\r\n  \"descricaoDoDepartamento\": \"Analistas de Qualidade\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/departamentos/{{codigoDoDepartamentos}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "{{codigoDoDepartamentos}}"
+              ]
+            },
+            "description": "Você vai poder editar com o **código do cargo**, uma vez que ele é unico no banco de dados assim evitando a necessidade de usar ids"
+          },
+          "response": []
+        },
+        {
+          "name": "7. Listar Paginado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura de paginação\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('content');\r",
+                  "    pm.expect(jsonData).to.have.property('pageable');\r",
+                  "    pm.expect(jsonData).to.have.property('totalElements');\r",
+                  "    pm.expect(jsonData).to.have.property('totalPages');\r",
+                  "    pm.expect(jsonData).to.have.property('number');\r",
+                  "    pm.expect(jsonData).to.have.property('size');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se content é um array\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.content).to.be.an('array');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se cada item tem a estrutura correta\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    if (jsonData.content.length > 0) {\r",
+                  "        const firstItem = jsonData.content[0];\r",
+                  "        pm.expect(firstItem).to.have.property('codigoDoDepartamento');\r",
+                  "        pm.expect(firstItem).to.have.property('descricaoDoDepartamento');\r",
+                  "    }\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se a paginação está correta\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.number).to.eql(0);\r",
+                  "    pm.expect(jsonData.size).to.eql(10);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/departamentos/paginado?page=0&size=10",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "paginado"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7.1 Listar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Codigo de status é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"A resposta é um array\", function () {\r",
+                  "    const dados = pm.response.json();\r",
+                  "    pm.expect(dados).to.be.an(\"array\");\r",
+                  "    pm.expect(dados.length).to.be.greaterThan(0);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Cada posição precisa seguir o contrato corretamente (codigoDoDepartamento, descricaoDoDepartamento)\", function () {\r",
+                  "    const dados = pm.response.json();\r",
+                  "    const primeiroItem = dados[0];\r",
+                  "\r",
+                  "    pm.expect(primeiroItem).to.have.property(\"codigoDoDepartamento\");\r",
+                  "    pm.expect(primeiroItem).to.have.property(\"descricaoDoDepartamento\");\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Cada valor é uma string\", function () {\r",
+                  "    const dados = pm.response.json();\r",
+                  "    const primeiroItem = dados[0];\r",
+                  "    pm.expect(primeiroItem.codigoDoDepartamento).to.be.a(\"string\");\r",
+                  "    pm.expect(primeiroItem.descricaoDoDepartamento).to.be.a(\"string\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/departamentos/listar",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "listar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8. Pesquisar com Filtro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se retornou um array\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.be.an('array');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Pesquisa filtrada retorna os resultados\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const searchTerm = \"Desenv\";\r",
+                  "\r",
+                  "    jsonData.forEach(item => {\r",
+                  "        pm.expect(item).to.have.property('descricaoDoDepartamento');\r",
+                  "        const descricao = item.descricaoDoDepartamento.toLowerCase();\r",
+                  "        pm.expect(descricao).to.include(searchTerm.toLowerCase());\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Cada um dos Itens tem a estrutura correta\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    if (jsonData.length > 0) {\r",
+                  "        const firstItem = jsonData[0];\r",
+                  "        pm.expect(firstItem).to.have.property('codigoDoDepartamento');\r",
+                  "        pm.expect(firstItem).to.have.property('descricaoDoDepartamento');\r",
+                  "\r",
+                  "        jsonData.forEach(item => {\r",
+                  "            pm.expect(item).to.have.property('codigoDoDepartamento');\r",
+                  "            pm.expect(item).to.have.property('descricaoDoDepartamento');\r",
+                  "            console.log(item)\r",
+                  "        });\r",
+                  "    }\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/departamentos/pesquisar?descricaoDoDepartamento=Desenv",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "pesquisar"
+              ],
+              "query": [
+                {
+                  "key": "descricaoDoDepartamento",
+                  "value": "Desenv"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "9. Pesquisar - Sem Resultado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "// \r",
+                  "pm.test(\"Validar se retornou array vazio\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.be.an('array');\r",
+                  "    pm.expect(jsonData.length).to.eql(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/departamentos/pesquisar?descricaoDoDepartamento=IREP3671",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "pesquisar"
+              ],
+              "query": [
+                {
+                  "key": "descricaoDoDepartamento",
+                  "value": "IREP3671"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10. Deletar Departamento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 204 sem conteudo)\", function () {\r",
+                  "    pm.expect(pm.response.code).to.equals(204);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Se retornar corpo, validar que está vazio ou com mensagem de sucesso\", function () {\r",
+                  "    const responseText = pm.response.text();\r",
+                  "    if (responseText && responseText.trim() !== \"\") {\r",
+                  "        const jsonData = pm.response.json();\r",
+                  "        pm.expect(jsonData).to.have.property('message');\r",
+                  "        pm.expect(jsonData.message).to.include(\"excluído\");\r",
+                  "    }\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/departamentos/{{codigoDoDepartamentos}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "{{codigoDoDepartamentos}}"
+              ]
+            },
+            "description": "Você vai poder Deletar com o **código do cargo**, ele não vai deletar fisicamente, vai realizar um soft delete onde ele cria um time stamp na coluna deleted_at"
+          },
+          "response": []
+        },
+        {
+          "name": "11. Deletar Departamento- Codigo Inexistente (Negativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// \r",
+                  "pm.test(\"Validar status code 404 Not Found\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se mensagem de erro indica Recurso não encontrado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(\"não encontrado\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/departamentos/QsA2",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "QsA2"
+              ]
+            },
+            "description": "Você vai poder Deletar com o **código do cargo**, ele não vai deletar fisicamente, vai realizar um soft delete onde ele cria um time stamp na coluna deleted_at"
+          },
+          "response": []
+        }
+      ],
+      "description": "Coleção Postman com testes"
+    },
+    {
+      "name": "Funcionarios",
+      "item": [
+        {
+          "name": "0. Rota Inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar se o erro indica Rota não encontrada\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('error');\r",
+                  "    pm.expect(jsonData.error).to.include(\"Rota não encontrada\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"rota_inexistente\", \"/api/departamento/admin/1\");\r",
+                  "\r",
+                  "pm.test(\"Validar se mensagem de erro indica (No endpoint GET)\", function () {\r",
+                  "    const rota_inexistente = pm.collectionVariables.get(\"rota_inexistente\");\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    \r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(`No endpoint GET ${rota_inexistente}`);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/admin/1",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "admin",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1. Criar funcionarios",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"O código de status é 201. Criado.\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do JSON retornado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('nome');\r",
+                  "    pm.expect(jsonData).to.have.property('cpf');\r",
+                  "    pm.expect(jsonData).to.have.property('viculos');\r",
+                  "\r",
+                  "    pm.expect(jsonData.codigoDoDepartamento).to.be.a('string');\r",
+                  "    pm.expect(jsonData.codigoDoDepartamento).to.be.a('string');\r",
+                  "    pm.expect(jsonData.codigoDoDepartamento).to.be.an('array');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se os dados retornados batem com o que foi enviado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "    pm.expect(jsonData.codigoDoDepartamentos).to.eql(requestBody.codigoDoDepartamentos);\r",
+                  "    pm.expect(jsonData.descricaoDoDepartamentos).to.eql(requestBody.descricaoDoDepartamentos);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Salva codigo do Departamentos para proximos Testes\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.environment.set(\"funcionariosVinculos\", jsonData.id);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Financeiro\",\r\n    \"cpf\": \"07185973970\",\r\n    \"viculos\": [\r\n        {\r\n            \"id\": 1,\r\n            \"empresa\": \"Dixi Soluções\",\r\n            \"matricula\": \"1\",\r\n            \"cargoId\": 1,\r\n            \"cargoDescricao\": \"Tecnico Suporte N1\",\r\n            \"departamentoId\": 1,\r\n            \"departamentoDescricao\": \"Departamento Pessoal\"\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/criar",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "criar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Criar funcionarios- Duplicado (Negativo)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"Validar estrutura do erro\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('timestamp');\r",
+                  "    pm.expect(jsonData).to.have.property('status');\r",
+                  "    pm.expect(jsonData).to.have.property('error');\r",
+                  "    pm.expect(jsonData).to.have.property('path');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Financeiro\",\r\n  \"cpf\": \"07185973930\",\r\n  \"viculos\": [ ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/departamentos/criar",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "departamentos",
+                "criar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Buscar por Código",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/{{funcionariosVinculos}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "{{funcionariosVinculos}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Buscar por Código - Inexistente (Negativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 404 Not Found\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Validar estrutura do erro\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('timestamp');\r",
+                  "    pm.expect(jsonData).to.have.property('status');\r",
+                  "    pm.expect(jsonData.status).to.eql(404);\r",
+                  "    pm.expect(jsonData).to.have.property('error');\r",
+                  "    pm.expect(jsonData).to.have.property('path');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/SS999",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "SS999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Editar funcionarios",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"ANdrey\",\r\n    \"cpf\": \"07185973970\",\r\n    \"viculos\": [\r\n        {\r\n\r\n            \"empresa\": \"EEE Soluções\",\r\n            \"matricula\": \"1\",\r\n            \"cargoDescricao\": \"SSTecnico Suporte N1\",\r\n      \r\n            \"departamentoDescricao\": \"Departamento Pessoal\"\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/{{funcionariosVinculos}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "{{funcionariosVinculos}}"
+              ]
+            },
+            "description": "Você vai poder editar com o **código do cargo**, uma vez que ele é unico no banco de dados assim evitando a necessidade de usar ids"
+          },
+          "response": []
+        },
+        {
+          "name": "6. Editar funcionarios- Inexistente (Negativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 404 Not Found\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "// \r",
+                  "pm.test(\"Validar mensagem de erro indica Recurso não encontrado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(\"não encontrado\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"codigoDoDepartamento\": \"QA\",\r\n  \"descricaoDoDepartamento\": \"Analistas de Qualidade\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/{{codigoDoDepartamentos}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "{{codigoDoDepartamentos}}"
+              ]
+            },
+            "description": "Você vai poder editar com o **código do cargo**, uma vez que ele é unico no banco de dados assim evitando a necessidade de usar ids"
+          },
+          "response": []
+        },
+        {
+          "name": "7. Listar Paginado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/paginado?page=0&size=10",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "paginado"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7.1 Listar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Codigo de status é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"A resposta é um array\", function () {\r",
+                  "    const dados = pm.response.json();\r",
+                  "    pm.expect(dados).to.be.an(\"array\");\r",
+                  "    pm.expect(dados.length).to.be.greaterThan(0);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/listar",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "listar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8. Pesquisar com Filtro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/12345678901",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "12345678901"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "9. Pesquisar - Sem Resultado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 404 OK\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/pesquisar?descricaoDoDepartamento=IREP3671",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "pesquisar"
+              ],
+              "query": [
+                {
+                  "key": "descricaoDoDepartamento",
+                  "value": "IREP3671"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10. Deletar Departamento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validar status code 204 sem conteudo)\", function () {\r",
+                  "    pm.expect(pm.response.code).to.equals(204);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Se retornar corpo, validar que está vazio ou com mensagem de sucesso\", function () {\r",
+                  "    const responseText = pm.response.text();\r",
+                  "    if (responseText && responseText.trim() !== \"\") {\r",
+                  "        const jsonData = pm.response.json();\r",
+                  "        pm.expect(jsonData).to.have.property('message');\r",
+                  "        pm.expect(jsonData.message).to.include(\"excluído\");\r",
+                  "    }\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/{{funcionariosVinculos}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "{{funcionariosVinculos}}"
+              ]
+            },
+            "description": "Você vai poder Deletar com o **código do cargo**, ele não vai deletar fisicamente, vai realizar um soft delete onde ele cria um time stamp na coluna deleted_at"
+          },
+          "response": []
+        },
+        {
+          "name": "11. Deletar Departamento- Codigo Inexistente (Negativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// \r",
+                  "pm.test(\"Validar status code 404 Not Found\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar se mensagem de erro indica Recurso não encontrado\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('message');\r",
+                  "    pm.expect(jsonData.message).to.include(\"não encontrado\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url_prova}}/funcionarios/{{funcionariosVinculos}}",
+              "host": [
+                "{{url_prova}}"
+              ],
+              "path": [
+                "funcionarios",
+                "{{funcionariosVinculos}}"
+              ]
+            },
+            "description": "Você vai poder Deletar com o **código do cargo**, ele não vai deletar fisicamente, vai realizar um soft delete onde ele cria um time stamp na coluna deleted_at"
+          },
+          "response": []
+        }
+      ],
+      "description": "Coleção Postman com testes"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url_prova",
+      "value": ""
+    },
+    {
+      "key": "rota_inexistente",
+      "value": ""
+    }
+  ]
+}
