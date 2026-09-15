@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter } from "react-router";
 import App from "./App.tsx";
 import PaginaErro from "./pages/PaginaErro.tsx";
 import PaginaFuncionarios from "./pages/funcionarios/PaginaFuncionarios.tsx";
