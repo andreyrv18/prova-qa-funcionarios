@@ -148,7 +148,7 @@
     color: var(--trancado-ou-explicativo);
 }
 /* Hover e estado Aberto */
-./* Estado Aberto */
+/* Estado Aberto */
 .dixi-combo--open:not(.dixi-combo--error) .dixi-combo__container {
     border-color: var(--azul-base);
 }
@@ -157,13 +157,13 @@
     color: var(--azul-base);
 }
 /* Hover */
-.dixi-combo:not(.dixi-combo--disabled, .dixi-combo--error)
+.dixi-combo:not(.dixi-combo--disabled, .dixi-combo--error),
     .dixi-combo__container:hover {
     border-color: var(--azul-base);
 }
 
-.dixi-combo:not(.dixi-combo--disabled, .dixi-combo--error)
-    .dixi-combo__container:hover
+.dixi-combo:not(.dixi-combo--disabled, .dixi-combo--error),
+    .dixi-combo__container:hover,
     .dixi-combo__label {
     color: var(--azul-base);
 }
