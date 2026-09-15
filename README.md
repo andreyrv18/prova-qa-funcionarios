@@ -155,7 +155,12 @@ Depois vamos acessar o Frontend (considerando que está na raiz do projeto):
     cd frontend
 ````
 
-e rodar o comando:
+instale as dependencias com: 
+````shell
+ npm install
+````
+
+depois rodar o comando:
 
 ````shell
     npm run dev
