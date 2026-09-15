@@ -1,13 +1,13 @@
-import React, {useState} from "react";
-import {useNavigate} from "react-router";
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import ListagemLayout from "../../components/layout/ListagenLayout/ListagemLayout";
 import Card from "../../components/card/Card";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
-import {CadastrarDepartamento} from "../../services/DepartamentosService";
-import {dicionarioDeRotas} from "../../ultil/DicionarioDeRotas";
+import { CadastrarDepartamento } from "../../services/DepartamentosService";
+import { dicionarioDeRotas } from "../../ultil/DicionarioDeRotas";
 import "./CadastrarDepartamentos.css";
-import {AppIcons} from "../../ultil/DicionariosDeIcones.ts";
+import { AppIcons } from "../../ultil/DicionariosDeIcones.ts";
 
 export const CadastrarDepartamentos: React.FC = () => {
     const navigate = useNavigate();
@@ -35,11 +35,13 @@ export const CadastrarDepartamentos: React.FC = () => {
 
         try {
             setCarregando(true);
-            await CadastrarDepartamento({descricao, codigo});
+            await CadastrarDepartamento({ descricao, codigo });
             navigate(dicionarioDeRotas.departamentos.listar);
         } catch (error) {
             console.error("Erro ao cadastrar departamento:", error);
-            setErroDescricao("Falha ao salvar o departamento. Tente novamente.");
+            setErroDescricao(
+                "Falha ao salvar o departamento. Tente novamente.",
+            );
         } finally {
             setCarregando(false);
         }
@@ -57,7 +59,7 @@ export const CadastrarDepartamentos: React.FC = () => {
                             label="Descrição do Departamento"
                             placeholder="Digite a descrição do departamento"
                             value={descricao}
-                            onChange={(e) => {
+                            onChange={e => {
                                 setDescricao(e.target.value);
                                 if (erroDescricao) setErroDescricao("");
                             }}
@@ -67,7 +69,7 @@ export const CadastrarDepartamentos: React.FC = () => {
                             label="Código"
                             placeholder="Digite o código do departamento"
                             value={codigo}
-                            onChange={(e) => {
+                            onChange={e => {
                                 setCodigo(e.target.value);
                                 if (erroCodigo) setErroCodigo("");
                             }}
@@ -80,10 +82,12 @@ export const CadastrarDepartamentos: React.FC = () => {
                             type="button"
                             variant="outline"
                             size="medium"
-                            onClick={() => navigate(dicionarioDeRotas.departamentos.listar)}
+                            onClick={() =>
+                                navigate(dicionarioDeRotas.departamentos.listar)
+                            }
                             disabled={carregando}
                         >
-                            <AppIcons.Fechar/>
+                            <AppIcons.Fechar />
                             Cancelar
                         </Button>
 
@@ -93,7 +97,7 @@ export const CadastrarDepartamentos: React.FC = () => {
                             size="medium"
                             disabled={carregando}
                         >
-                            <AppIcons.Salvar/>
+                            <AppIcons.Salvar />
                             {carregando ? "Salvando..." : "Salvar"}
                         </Button>
                     </div>

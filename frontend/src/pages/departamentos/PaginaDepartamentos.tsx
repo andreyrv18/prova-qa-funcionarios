@@ -1,13 +1,15 @@
-import React, {useState} from "react";
-import {useLoaderData, useNavigate} from "react-router";
+import React, { useState } from "react";
+import { useLoaderData, useNavigate } from "react-router";
 import ListagemLayout from "../../components/layout/ListagenLayout/ListagemLayout";
 import Card from "../../components/card/Card";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
-import Tabela, {type ColunaTabela} from "../../components/tabela/Tabela";
-import type {IDepartamentos} from "../../interfaces/Interfaces";
-import {dicionarioDeRotas} from "../../ultil/DicionarioDeRotas";
-import {AppIcons} from "../../ultil/DicionariosDeIcones.ts";
+import Tabela from "../../components/tabela/Tabela";
+import { type ColunaTabela } from "../../components/tabela/Tabela.types.ts";
+import type { IDepartamentos } from "../../interfaces/Interfaces";
+import { dicionarioDeRotas } from "../../ultil/DicionarioDeRotas";
+import { AppIcons } from "../../ultil/DicionariosDeIcones.ts";
+import { baixarRelatorioCsv } from "../../ultil/relatorioService.ts";
 
 export const PaginaDepartamentos: React.FC = () => {
     const loaderData = useLoaderData() as { records: IDepartamentos[] };
@@ -19,7 +21,7 @@ export const PaginaDepartamentos: React.FC = () => {
     const departamentos = loaderData?.records || [];
 
     // Filtro em tempo real por nome/descrição e código
-    const departamentosFiltrados = departamentos.filter((dep) => {
+    const departamentosFiltrados = departamentos.filter(dep => {
         const nome = (dep.descricaoDoDepartamento || "").toLowerCase();
         const codigo = String(dep.codigoDoDepartamento || "");
         return (
@@ -35,50 +37,64 @@ export const PaginaDepartamentos: React.FC = () => {
             titulo: "Editar",
             width: "80px",
             align: "center",
-            render: (departamento) => (
+            render: departamento => (
                 <button
                     className="dixi-tabela__btn-icon"
                     onClick={() =>
                         navigate(
                             dicionarioDeRotas.departamentos.id.replace(
                                 ":id",
-                                String(departamento.codigoDoDepartamento))
+                                String(departamento.codigoDoDepartamento),
+                            ),
                         )
                     }
                     title="Editar Departamento"
                 >
-                    <AppIcons.Editar/>
+                    <AppIcons.Editar />
                 </button>
             ),
         },
         {
             key: "nome",
             titulo: "Nome",
-            render: (departamento) => departamento.descricaoDoDepartamento,
+            render: departamento => departamento.descricaoDoDepartamento,
         },
         {
             key: "id",
             titulo: "Código",
-            render: (departamento) => String(departamento.codigoDoDepartamento).padStart(16, "0"),
+            render: departamento =>
+                String(departamento.codigoDoDepartamento).padStart(16, "0"),
         },
     ];
-
+    const handleExportarRelatorio = () => {
+        baixarRelatorioCsv(
+            `${dicionarioDeRotas.api.departamentos}/relatorio`,
+            { filtro: filtroNome, fildesc: filtroCodigo },
+            "relatorio_departamentos.csv",
+        );
+    };
     return (
         <ListagemLayout
             titulo="Departamentos"
             subtitulo="Veja os departamentos cadastrados no sistema."
             actions={
                 <>
-                    <Button variant="outline" size="medium">
-                        <AppIcons.Download/>
+                    <Button
+                        variant="outline"
+                        size="medium"
+                        onClick={handleExportarRelatorio}
+                    >
+                        <AppIcons.Download />
                         Baixar Relatório
                     </Button>
                     <Button
                         variant="outline"
                         size="medium"
-                        onClick={() => navigate(dicionarioDeRotas.departamentos.cadastrar)}
+                        onClick={() =>
+                            navigate(dicionarioDeRotas.departamentos.cadastrar)
+                        }
                     >
-                        <AppIcons.Adicionar/>
+                        <AppIcons.Adicionar />
                         Novo Departamento
                     </Button>
                 </>
@@ -86,18 +102,24 @@ export const PaginaDepartamentos: React.FC = () => {
         >
             <Card>
                 {/* Filtros da tabela */}
-                <div style={{display: "flex", gap: "16px", marginBottom: "20px"}}>
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "16px",
+                        marginBottom: "20px",
+                    }}
+                >
                     <Input
                         label="Descrição do Departamento"
                         placeholder="Procure pelo nome do departamento"
                         value={filtroNome}
-                        onChange={(e) => setFiltroNome(e.target.value)}
+                        onChange={e => setFiltroNome(e.target.value)}
                     />
                     <Input
                         label="Código"
                         placeholder="Procure pelo código do departamento"
                         value={filtroCodigo}
-                        onChange={(e) => setFiltroCodigo(e.target.value)}
+                        onChange={e => setFiltroCodigo(e.target.value)}
                     />
                 </div>
 
@@ -105,7 +127,12 @@ export const PaginaDepartamentos: React.FC = () => {
                 <Tabela
                     colunas={colunas}
                     dados={departamentosFiltrados}
-                    keyExtractor={(dep, index) => dep.codigoDoDepartamento ?? dep.descricaoDoDepartamento ?? index}/>
+                    keyExtractor={(dep, index) =>
+                        dep.codigoDoDepartamento ??
+                        dep.descricaoDoDepartamento ??
+                        index
+                    }
+                />
             </Card>
         </ListagemLayout>
     );

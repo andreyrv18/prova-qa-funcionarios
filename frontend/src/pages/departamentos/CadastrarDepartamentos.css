@@ -6,18 +6,17 @@
 
 .dixi-form-cadastro__row {
     display: grid;
-    grid-template-columns: 2fr 1fr;
     gap: 16px;
+    grid-template-columns: 2fr 1fr;
 }
 
 .dixi-form-cadastro__actions {
-    display: flex;
-    justify-content: flex-end;
     align-items: center;
+    display: flex;
     gap: 12px;
+    justify-content: flex-end;
 }
-
-@media (max-width: 768px) {
+@media (width <= 768px) {
     .dixi-form-cadastro__row {
         grid-template-columns: 1fr;
     }

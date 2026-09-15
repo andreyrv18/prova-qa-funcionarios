@@ -1,17 +1,17 @@
-import React, {useEffect, useState} from "react";
-import {useLoaderData, useNavigate, useParams} from "react-router";
+import React, { useEffect, useState } from "react";
+import { useLoaderData, useNavigate, useParams } from "react-router";
 import ListagemLayout from "../../components/layout/ListagenLayout/ListagemLayout";
 import Card from "../../components/card/Card";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
-import {PutDepartamento} from "../../services/DepartamentosService";
-import {dicionarioDeRotas} from "../../ultil/DicionarioDeRotas";
-import type {IDepartamentos} from "../../interfaces/Interfaces";
-import {AppIcons} from "../../ultil/DicionariosDeIcones.ts";
+import { PutDepartamento } from "../../services/DepartamentosService";
+import { dicionarioDeRotas } from "../../ultil/DicionarioDeRotas";
+import type { IDepartamentos } from "../../interfaces/Interfaces";
+import { AppIcons } from "../../ultil/DicionariosDeIcones.ts";
 
 export const EditarDepartamentos: React.FC = () => {
     const navigate = useNavigate();
-    const {id} = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string }>();
     const departamentoData = useLoaderData() as IDepartamentos;
 
     const [descricao, setDescricao] = useState("");
@@ -22,16 +22,8 @@ export const EditarDepartamentos: React.FC = () => {
 
     useEffect(() => {
         if (departamentoData) {
-            setDescricao(
-                departamentoData.descricaoDoDepartamento ||
-
-                ""
-            );
-            setCodigo(
-                departamentoData.codigoDoDepartamento ||
-
-                ""
-            );
+            setDescricao(departamentoData.descricaoDoDepartamento || "");
+            setCodigo(departamentoData.codigoDoDepartamento || "");
         }
     }, [departamentoData]);
     const handleSubmit = async (e: React.FormEvent) => {
@@ -51,7 +43,7 @@ export const EditarDepartamentos: React.FC = () => {
 
         try {
             setCarregando(true);
-            await PutDepartamento(id, {descricao, codigo});
+            await PutDepartamento(id, { descricao, codigo });
             navigate(dicionarioDeRotas.departamentos.listar);
         } catch (error) {
             console.error("Erro ao atualizar departamento:", error);
@@ -73,7 +65,7 @@ export const EditarDepartamentos: React.FC = () => {
                             label="Descrição do Departamento"
                             placeholder="Insira o nome do departamento"
                             value={descricao}
-                            onChange={(e) => {
+                            onChange={e => {
                                 setDescricao(e.target.value);
                                 if (erroDescricao) setErroDescricao("");
                             }}
@@ -83,7 +75,7 @@ export const EditarDepartamentos: React.FC = () => {
                             label="Código do Departamento"
                             placeholder="0000000000"
                             value={codigo}
-                            onChange={(e) => {
+                            onChange={e => {
                                 setCodigo(e.target.value);
                                 if (erroCodigo) setErroCodigo("");
                             }}
@@ -96,11 +88,12 @@ export const EditarDepartamentos: React.FC = () => {
                             type="button"
                             variant="outline"
                             size="medium"
-                            onClick={() => navigate(dicionarioDeRotas.departamentos.listar)}
+                            onClick={() =>
+                                navigate(dicionarioDeRotas.departamentos.listar)
+                            }
                             disabled={carregando}
                         >
-                            <AppIcons.Fechar/>
-
+                            <AppIcons.Fechar />
                             Cancelar
                         </Button>
 
@@ -110,7 +103,7 @@ export const EditarDepartamentos: React.FC = () => {
                             size="medium"
                             disabled={carregando}
                         >
-                            <AppIcons.Salvar/>
+                            <AppIcons.Salvar />
                             {carregando ? "Salvando..." : "Confirmar"}
                         </Button>
                     </div>
