@@ -1,3 +1,5 @@
+
+/* stylelint-disable selector-class-pattern */
 .dixi-combo {
     display: flex;
     flex-direction: column;
@@ -32,21 +34,6 @@
     z-index: 1;
 }
 
-/* Hover e estado Aberto */
-.dixi-combo:not(.dixi-combo--disabled):not(.dixi-combo--error) .dixi-combo__container:hover,
-.dixi-combo--open:not(.dixi-combo--error) .dixi-combo__container {
-    border-color: var(--azul-base);
-}
-.dixi-combo:not(.dixi-combo--disabled):not(.dixi-combo--error) .dixi-combo__container:hover .dixi-combo__label,
-.dixi-combo--open:not(.dixi-combo--error) .dixi-combo__label {
-    color: var(--azul-base);
-}
-
-/* Quando aberto, a linha da borda inferior continua arredondada mas o menu desce */
-.dixi-combo--open .dixi-combo__dropdown {
-    border-color: var(--azul-base);
-}
-
 .dixi-combo__value {
     color: var(--texto-destaque);
     flex: 1;
@@ -74,6 +61,7 @@
     display: flex;
     font-size: 16px;
 }
+
 .dixi-combo__clear:hover {
     color: var(--texto-destaque);
 }
@@ -82,13 +70,12 @@
     color: var(--texto-destaque);
     display: flex;
 }
-
 /* Lista Suspensa (Dropdown Menu) */
 .dixi-combo__dropdown {
     background: var(--background);
     border: 1px solid var(--outline);
     border-radius: 6px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
     display: flex;
     flex-direction: column;
     left: 0;
@@ -102,11 +89,11 @@
     width: 100%;
     z-index: 10;
 }
-
 /* Scrollbar do Combobox (estilo pílula) */
 .dixi-combo__dropdown::-webkit-scrollbar {
     width: 6px;
 }
+
 .dixi-combo__dropdown::-webkit-scrollbar-thumb {
     background-color: var(--trancado-ou-explicativo);
     border-radius: 10px;
@@ -129,32 +116,58 @@
     color: var(--azul-base);
     font-weight: var(--sans-semibold);
 }
-
 /* Estado de Erro */
 .dixi-combo--error .dixi-combo__container {
-    border-color: #E53E3E;
+    border-color: #e53e3e;
 }
+
 .dixi-combo--error .dixi-combo__label {
-    color: #E53E3E;
+    color: #e53e3e;
 }
+
 .dixi-combo__error-msg {
-    color: #E53E3E;
+    color: #e53e3e;
     font-size: 12px;
     font-weight: var(--sans-semibold);
     padding-left: 4px;
 }
-
 /* Estado Desabilitado */
 .dixi-combo--disabled .dixi-combo__container,
 .dixi-combo--disabled .dixi-combo__label {
     background: var(--background-2);
 }
+
 .dixi-combo--disabled .dixi-combo__container {
     border-color: var(--trancado-ou-explicativo);
     cursor: not-allowed;
 }
+
 .dixi-combo--disabled .dixi-combo__value,
 .dixi-combo--disabled .dixi-combo__actions,
 .dixi-combo--disabled .dixi-combo__arrow {
     color: var(--trancado-ou-explicativo);
+}
+/* Hover e estado Aberto */
+./* Estado Aberto */
+.dixi-combo--open:not(.dixi-combo--error) .dixi-combo__container {
+    border-color: var(--azul-base);
+}
+
+.dixi-combo--open:not(.dixi-combo--error) .dixi-combo__label {
+    color: var(--azul-base);
+}
+/* Hover */
+.dixi-combo:not(.dixi-combo--disabled, .dixi-combo--error)
+    .dixi-combo__container:hover {
+    border-color: var(--azul-base);
+}
+
+.dixi-combo:not(.dixi-combo--disabled, .dixi-combo--error)
+    .dixi-combo__container:hover
+    .dixi-combo__label {
+    color: var(--azul-base);
+}
+/* Quando aberto, a linha da borda inferior continua arredondada mas o menu desce */
+.dixi-combo--open .dixi-combo__dropdown {
+    border-color: var(--azul-base);
 }

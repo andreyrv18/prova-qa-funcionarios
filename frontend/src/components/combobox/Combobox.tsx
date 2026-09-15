@@ -4,19 +4,19 @@ import type { ComboboxProps, ComboboxOption } from "./Combobox.types";
 import { AppIcons } from "../../ultil/DicionariosDeIcones.ts";
 
 const Combobox = ({
-                      label,
-                      options,
-                      value,
-                      onChange,
-                      placeholder = "Selecione Um...",
-                      error,
-                      disabled = false,
-                      className = "",
-                  }: ComboboxProps) => {
+    label,
+    options,
+    value,
+    onChange,
+    placeholder = "Selecione Um...",
+    error,
+    disabled = false,
+    className = "",
+}: ComboboxProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const selectedOption = options.find((opt) => opt.value === value);
+    const selectedOption = options.find(opt => opt.value === value);
 
     // Lógica para fechar o dropdown ao clicar fora do componente
     useEffect(() => {
@@ -29,7 +29,8 @@ const Combobox = ({
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const handleToggle = () => {
@@ -61,17 +62,28 @@ const Combobox = ({
             <div className="dixi-combo__container" onClick={handleToggle}>
                 {label && <label className="dixi-combo__label">{label}</label>}
 
-                <span className={`dixi-combo__value ${!selectedOption ? "dixi-combo__placeholder" : ""}`}>
-          {selectedOption ? selectedOption.label : placeholder}
-        </span>
+                <span
+                    className={`dixi-combo__value ${!selectedOption ? "dixi-combo__placeholder" : ""}`}
+                >
+                    {selectedOption ? selectedOption.label : placeholder}
+                </span>
 
                 <div className="dixi-combo__actions">
                     {selectedOption && !disabled && (
-                        <span className="dixi-combo__clear" onClick={handleClear}>
-              <AppIcons.Fechar />
-            </span>
+                        <span
+                            className="dixi-combo__clear"
+                            onClick={handleClear}
+                        >
+                            <AppIcons.Fechar />
+                        </span>
                     )}
-                    <svg className="dixi-combo__arrow" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <svg
+                        className="dixi-combo__arrow"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                    >
                         <path d="M7 10l5 5 5-5z" />
                     </svg>
                 </div>
@@ -79,7 +91,7 @@ const Combobox = ({
 
             {isOpen && (
                 <ul className="dixi-combo__dropdown">
-                    {options.map((option) => (
+                    {options.map(option => (
                         <li
                             key={option.value}
                             className={`dixi-combo__option ${option.value === value ? "dixi-combo__option--selected" : ""}`}
