@@ -1,5 +1,5 @@
-import type {IPageResponse,IVinculos} from "../interfaces/Interfaces.ts";
-import {dicionarioDeRotas} from "../ultil/DicionarioDeRotas.ts";
+import type { IPageResponse, IVinculos } from "../interfaces/Interfaces.ts";
+import { dicionarioDeRotas } from "../ultil/DicionarioDeRotas.ts";
 
 export const GetVinculoByCpf = async (id: string): Promise<IVinculos> => {
     const response = await fetch(`${dicionarioDeRotas.api.vinculos}/${id}`, {

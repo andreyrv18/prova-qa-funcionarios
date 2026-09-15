@@ -1,10 +1,13 @@
-import type {IFuncionarios,IPageResponse} from "../interfaces/Interfaces.ts";
-import {API_BASE_URL,dicionarioDeRotas} from "../ultil/DicionarioDeRotas.ts";
+import type { IFuncionarios, IPageResponse } from "../interfaces/Interfaces.ts";
+import { API_BASE_URL, dicionarioDeRotas } from "../ultil/DicionarioDeRotas.ts";
 
 export const GetFuncionariosList = async (): Promise<IFuncionarios[]> => {
-    const response = await fetch(dicionarioDeRotas.api.funcionarios, {
-        method: "GET",
-    });
+    const response = await fetch(
+        `${dicionarioDeRotas.api.funcionarios}/listar`,
+        {
+            method: "GET",
+        },
+    );
 
     if (!response.ok) {
         throw await response.json();
@@ -18,9 +21,12 @@ export const GetFuncionariosList = async (): Promise<IFuncionarios[]> => {
 export const GetFuncionariosPaginado = async (): Promise<
     IPageResponse<IFuncionarios>
 > => {
-    const response = await fetch(dicionarioDeRotas.api.funcionarios, {
-        method: "GET",
-    });
+    const response = await fetch(
+        `${dicionarioDeRotas.api.funcionarios}/paginado`,
+        {
+            method: "GET",
+        },
+    );
 
     if (!response.ok) {
         throw await response.json();
@@ -34,9 +40,12 @@ export const GetFuncionariosPaginado = async (): Promise<
 export const getFuncionarioById = async (
     id: string,
 ): Promise<IFuncionarios> => {
-    const response = await fetch(`${dicionarioDeRotas.api.funcionarios}/${id}`, {
-        method: "GET",
-    });
+    const response = await fetch(
+        `${dicionarioDeRotas.api.funcionarios}/${id}`,
+        {
+            method: "GET",
+        },
+    );
     if (!response.ok) {
         throw await response.json();
     }
@@ -56,11 +65,14 @@ export const PostFuncionarios = async (payload: object) => {
 };
 
 export const PutFuncionario = async (cpf: string, funcionarioDTO: object) => {
-    const response = await fetch(`${dicionarioDeRotas.api.funcionarios}/${cpf}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(funcionarioDTO),
-    });
+    const response = await fetch(
+        `${dicionarioDeRotas.api.funcionarios}/${cpf}`,
+        {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(funcionarioDTO),
+        },
+    );
 
     if (!response.ok) {
         throw await response.json();
