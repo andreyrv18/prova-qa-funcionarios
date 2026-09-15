@@ -1,17 +1,17 @@
-import React, {useEffect, useState} from "react";
-import {useLoaderData, useNavigate, useParams} from "react-router";
+import React, { useEffect, useState } from "react";
+import { useLoaderData, useNavigate, useParams } from "react-router";
 import ListagemLayout from "../../components/layout/ListagenLayout/ListagemLayout";
 import Card from "../../components/card/Card";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
-import {PutCargo} from "../../services/CargosService";
-import {dicionarioDeRotas} from "../../ultil/DicionarioDeRotas";
-import type {ICargos} from "../../interfaces/Interfaces";
-import {AppIcons} from "../../ultil/DicionariosDeIcones.ts";
+import { PutCargo } from "../../services/CargosService";
+import { dicionarioDeRotas } from "../../ultil/DicionarioDeRotas";
+import type { ICargos } from "../../interfaces/Interfaces";
+import { AppIcons } from "../../ultil/DicionariosDeIcones.ts";
 
 export const EditarCargos: React.FC = () => {
     const navigate = useNavigate();
-    const {id} = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string }>();
     const cargoData = useLoaderData() as ICargos;
 
     const [descricao, setDescricao] = useState("");
@@ -44,7 +44,7 @@ export const EditarCargos: React.FC = () => {
 
         try {
             setCarregando(true);
-            await PutCargo(id, {descricao, codigo});
+            await PutCargo(id, { descricao, codigo });
             navigate(dicionarioDeRotas.cargos.listar);
         } catch (error) {
             console.error("Erro ao atualizar cargo:", error);
@@ -66,7 +66,7 @@ export const EditarCargos: React.FC = () => {
                             label="Descrição do Cargo"
                             placeholder="Insira o nome do cargo"
                             value={descricao}
-                            onChange={(e) => {
+                            onChange={e => {
                                 setDescricao(e.target.value);
                                 if (erroDescricao) setErroDescricao("");
                             }}
@@ -76,7 +76,7 @@ export const EditarCargos: React.FC = () => {
                             label="Código do Cargo"
                             placeholder="0000000000"
                             value={codigo}
-                            onChange={(e) => {
+                            onChange={e => {
                                 setCodigo(e.target.value);
                                 if (erroCodigo) setErroCodigo("");
                             }}
@@ -89,10 +89,12 @@ export const EditarCargos: React.FC = () => {
                             type="button"
                             variant="outline"
                             size="medium"
-                            onClick={() => navigate(dicionarioDeRotas.cargos.listar)}
+                            onClick={() =>
+                                navigate(dicionarioDeRotas.cargos.listar)
+                            }
                             disabled={carregando}
                         >
-                            <AppIcons.Fechar/>
+                            <AppIcons.Fechar />
                             Cancelar
                         </Button>
 
@@ -102,7 +104,7 @@ export const EditarCargos: React.FC = () => {
                             size="medium"
                             disabled={carregando}
                         >
-                            <AppIcons.Salvar/>
+                            <AppIcons.Salvar />
                             {carregando ? "Salvando..." : "Confirmar"}
                         </Button>
                     </div>
