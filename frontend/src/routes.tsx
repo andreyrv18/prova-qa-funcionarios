@@ -35,9 +35,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: (
-                    <Navigate to={dicionarioDeRotas.cargos.listar} replace />
-                ),
+                element: <PaginaFuncionarios />,
             },
             {
                 id: "rota-funcionarios",

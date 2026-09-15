@@ -1,10 +1,10 @@
-package org.backend.prova; // GARANTA que este é o pacote correto
+package org.backend.prova;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -14,17 +14,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 1. Desabilita CSRF
-                .csrf(AbstractHttpConfigurer::disable)
-
-                // 2. Desabilita CORS do Security temporariamente (o do WebMvc já cuida disso)
-                .cors(AbstractHttpConfigurer::disable)
-
-                .authorizeHttpRequests(auth -> auth
-                        // 3. LIBERA ABSOLUTAMENTE TUDO. Sem exceção.
-                        .anyRequest().permitAll()
-                );
-
+            .csrf(csrf -> csrf.disable())
+            .cors(Customizer.withDefaults())  // Usa a config do CorsConfig
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/**").permitAll()  // Libera TUDO da API
+                .anyRequest().permitAll()
+            );
+            
         return http.build();
     }
 }

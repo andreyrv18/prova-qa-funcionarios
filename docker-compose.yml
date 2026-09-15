@@ -29,7 +29,6 @@ services:
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     environment:
-      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,http://localhost,http://127.0.0.1:3000
       - SPRING_DATASOURCE_URL=${DB_URL}
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
