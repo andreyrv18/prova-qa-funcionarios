@@ -10,11 +10,11 @@ interface ListagemLayoutProps {
 }
 
 export const ListagemLayout: React.FC<ListagemLayoutProps> = ({
-                                                                  titulo,
-                                                                  subtitulo,
-                                                                  actions,
-                                                                  children,
-                                                              }) => {
+    titulo,
+    subtitulo,
+    actions,
+    children,
+}) => {
     return (
         <div className="dixi-listagem-layout">
             <Navbar />
@@ -22,16 +22,24 @@ export const ListagemLayout: React.FC<ListagemLayoutProps> = ({
                 <div className="dixi-listagem-layout__container">
                     <header className="dixi-listagem-layout__header">
                         <div className="dixi-listagem-layout__title-group">
-                            <h1 className="dixi-listagem-layout__title">{titulo}</h1>
+                            <h1 className="dixi-listagem-layout__title">
+                                {titulo}
+                            </h1>
                             {subtitulo && (
-                                <p className="dixi-listagem-layout__subtitle">{subtitulo}</p>
+                                <p className="dixi-listagem-layout__subtitle">
+                                    {subtitulo}
+                                </p>
                             )}
                         </div>
                         {actions && (
-                            <div className="dixi-listagem-layout__actions">{actions}</div>
+                            <div className="dixi-listagem-layout__actions">
+                                {actions}
+                            </div>
                         )}
                     </header>
-                    <section className="dixi-listagem-layout__content">{children}</section>
+                    <section className="dixi-listagem-layout__content">
+                        {children}
+                    </section>
                 </div>
             </main>
         </div>
