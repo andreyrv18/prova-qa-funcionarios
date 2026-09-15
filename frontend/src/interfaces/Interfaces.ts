@@ -26,7 +26,7 @@ export interface IVinculos {
     departamento: string;
     empresa: string;
     funicionario: string;
-    matricula: number;
+    matricula: string;
 }
 
 export interface IVinculoItem {
