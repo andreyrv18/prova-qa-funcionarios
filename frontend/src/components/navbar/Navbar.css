@@ -1,22 +1,22 @@
 .dixi-navbar {
-    width: 100px;
-    min-width: 100px;
-    height: 100vh;
+    align-items: center;
     background-color: var(--azul-base);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    height: 100vh;
+    left: 0;
+    min-width: 100px;
     position: fixed;
     top: 0;
-    left: 0;
+    width: 100px;
     z-index: 100;
 }
 
 .dixi-navbar__logo {
-    padding: 24px 0;
+    align-items: center;
     display: flex;
     justify-content: center;
-    align-items: center;
+    padding: 24px 0;
     width: 100%;
 }
 
@@ -27,17 +27,19 @@
 }
 
 .dixi-navbar__item {
+    align-items: center;
     background: transparent;
     border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-    padding: 16px 8px;
+    border-bottom: 1px solid rgb(255 255 255 / 15%);
+    border-top: 1px solid rgb(255 255 255 / 15%);
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 6px;
-    cursor: pointer;
+    padding: 16px 8px;
+    text-decoration: none;
     transition: background-color 0.2s ease;
     width: 100%;
 }
@@ -47,35 +49,18 @@
 }
 
 .dixi-navbar__item--active {
-    background-color: rgba(0, 0, 0, 0.1);
-    box-shadow: inset 4px 0 0 #ffffff;
+    background-color: rgb(0 0 0 / 10%);
+    box-shadow: inset 4px 0 0 #fff;
 }
 
 .dixi-navbar__icon {
-    font-size: 24px;
     display: flex;
+    font-size: 24px;
 }
 
 .dixi-navbar__label {
+    color: #fff;
     font-size: 11px;
     font-weight: var(--sans-semibold);
-    color: #ffffff;
     text-align: center;
-}
-.dixi-navbar__item {
-    background: transparent;
-    border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-    padding: 16px 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    width: 100%;
-    text-decoration: none; /* Adicionado para suportar a tag <a> do NavLink */
-    box-sizing: border-box;
 }

@@ -1,32 +1,37 @@
-import {NavLink} from "react-router";
+import { NavLink } from "react-router";
 import "./Navbar.css";
-import type {NavbarProps, NavItemKey} from "./Navbar.types";
-import {AppIcons} from "../../ultil/DicionariosDeIcones";
-import {dicionarioDeRotas} from "../../ultil/DicionarioDeRotas";
-import type {JSX} from "react";
+import type { NavbarProps, NavItemKey } from "./Navbar.types";
+import { AppIcons } from "../../ultil/DicionariosDeIcones";
+import { dicionarioDeRotas } from "../../ultil/DicionarioDeRotas";
+import type { JSX } from "react";
 
-const navItems: { key: NavItemKey; label: string; path: string; icon: JSX.Element }[] = [
+const navItems: {
+    key: NavItemKey;
+    label: string;
+    path: string;
+    icon: JSX.Element;
+}[] = [
     {
         key: "funcionario",
         label: "Funcionário",
         path: dicionarioDeRotas.funcionarios.listar,
-        icon: <AppIcons.Funcionario/>
+        icon: <AppIcons.Funcionario />,
     },
     {
         key: "cargo",
         label: "Cargo",
         path: dicionarioDeRotas.cargos.listar,
-        icon: <AppIcons.Cargo/>
+        icon: <AppIcons.Cargo />,
     },
     {
         key: "departamento",
         label: "Departamento",
         path: dicionarioDeRotas.departamentos.listar,
-        icon: <AppIcons.Departamento/>
+        icon: <AppIcons.Departamento />,
     },
 ];
 
-export const Navbar = ({activeItem}: NavbarProps) => {
+export const Navbar = ({ activeItem }: NavbarProps) => {
     return (
         <aside className="dixi-navbar">
             <div className="dixi-navbar__logo">
@@ -42,11 +47,11 @@ export const Navbar = ({activeItem}: NavbarProps) => {
             </div>
 
             <nav className="dixi-navbar__menu">
-                {navItems.map((item) => (
+                {navItems.map(item => (
                     <NavLink
                         key={item.key}
                         to={item.path}
-                        className={({isActive}) =>
+                        className={({ isActive }) =>
                             `dixi-navbar__item ${isActive || activeItem === item.key ? "dixi-navbar__item--active" : ""}`
                         }
                     >
