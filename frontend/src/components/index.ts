@@ -4,7 +4,7 @@ export type {
     ButtonProps,
     ButtonVariant,
     ButtonSize,
-} from "./Button/Button.types";
+} from "./button/Button.types";
 
 export { default as Switch } from "./switch/Switch";
-export type { SwitchProps } from "./Switch/Switch.types";
+export type { SwitchProps } from "./switch/Switch.types";
