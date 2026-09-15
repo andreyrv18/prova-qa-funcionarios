@@ -1,4 +1,7 @@
 :root {
+    /* Sistema */
+    color-scheme: light dark;
+    user-select: none;
     /* Cores */
     --azul-base: #3379bc;
     --azul-hover: #40a5dd;
@@ -23,9 +26,6 @@
     --titulo-de-campo-de-texto: 10px;
     --interior-de-campo-de-texto: 14px;
     --texto-de-botao: 14px;
-    /* Sistema */
-    color-scheme: light dark;
-    user-select: none;
     @media (width <= 1024px) {
         font-size: 16px;
     }
@@ -45,4 +45,8 @@
         --tooltip: #2a2a2a;
         --texto-destaque: #fff;
     }
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
 }
